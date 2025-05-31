@@ -12,7 +12,7 @@ type ExportButtonProps = {
   growth?: number;
   earnOutPercentage?: number;
   taxRate?: number;
-  yearlyData: { year: number; earnOut: number; sellerFinancing: number; allCash: number }[];
+  yearlyData: { year: string; earnOut: number; sellerFinancing: number; allCash: number }[];
   chartImage?: string | null; // 🔁 ADD THIS
 };
 

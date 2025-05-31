@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   table: {
-    display: "table",
     width: "auto",
     borderStyle: "solid",
     borderWidth: 1,
@@ -98,7 +97,7 @@ type ScenarioValues = {
 };
 
 type YearlyData = {
-  year: number;
+  year: string;
   earnOut: number;
   sellerFinancing: number;
   allCash: number;
