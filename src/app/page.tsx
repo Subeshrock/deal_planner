@@ -25,7 +25,7 @@ export default function DealPage() {
   const [chartImage, setChartImage] = useState<string | null>(null);
 
   const handleCalculate = (data: DealFormInput) => {
-    let { annualRevenue, churnRate, growthRate, earnOutPercent, taxRate } = data;
+    const { annualRevenue, churnRate, growthRate, earnOutPercent, taxRate } = data;
     setPdfData({churn: churnRate, revenue: annualRevenue, growth: growthRate, earnOutPercentage: earnOutPercent, taxRate});
     const { chartData, summary } = calculateDealScenarios(data);
     setChartData(chartData);
