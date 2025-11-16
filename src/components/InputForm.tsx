@@ -143,7 +143,7 @@ export function InputForm({ onSubmit, onImportData, language = 'en' }: InputForm
       {/* Basic Inputs */}
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">{t('basicInputs', language)}</h2>
-        {renderInput("annualRevenue", `${t('annualRevenue', language)} (${getCurrencySymbol(watchedValues.currency || 'USD')})`, "The expected annual revenue of the business post-acquisition.", {}, { min: 1, step: 1000 })}
+        {renderInput("annualRevenue", `${t('annualRevenue', language)} (${getCurrencySymbol('USD')})`, "The expected annual revenue of the business post-acquisition.", {}, { min: 1, step: 1000 })}
         {renderInput("churnRate", `${t('churnRate', language)} (${t('percent', language)})`, "Percentage of revenue lost annually due to customer attrition.", {}, { min: 0, max: 100, step: 0.1 })}
         {renderInput("growthRate", `${t('growthRate', language)} (${t('percent', language)})`, "Expected annual revenue growth percentage.", { optional: true }, { min: -100, max: 1000, step: 0.1 })}
         {renderInput("earnOutPercent", `${t('earnOutPercent', language)} (${t('percent', language)})`, "Percentage of annual revenue paid as earn-out to the seller.", {}, { min: 0, max: 100, step: 0.1 })}
@@ -174,11 +174,11 @@ export function InputForm({ onSubmit, onImportData, language = 'en' }: InputForm
             className="w-full p-2 border rounded"
           >
             <option value="USD">USD ($) - Base Currency</option>
-            <option value="EUR">EUR (€) - {exchangeRates.EUR ? `1 USD = ${exchangeRates.EUR.toFixed(2)} EUR` : 'Rate unavailable'}</option>
-            <option value="GBP">GBP (£) - {exchangeRates.GBP ? `1 USD = ${exchangeRates.GBP.toFixed(2)} GBP` : 'Rate unavailable'}</option>
-            <option value="JPY">JPY (¥) - {exchangeRates.JPY ? `1 USD = ${exchangeRates.JPY.toFixed(0)} JPY` : 'Rate unavailable'}</option>
-            <option value="CAD">CAD (C$) - {exchangeRates.CAD ? `1 USD = ${exchangeRates.CAD.toFixed(2)} CAD` : 'Rate unavailable'}</option>
-            <option value="AUD">AUD (A$) - {exchangeRates.AUD ? `1 USD = ${exchangeRates.AUD.toFixed(2)} AUD` : 'Rate unavailable'}</option>
+            <option value="EUR">EUR (€) - {exchangeRates.EUR ? `1 USD = ${exchangeRates.EUR.toFixed(2)} EUR` : 'Loading...'}</option>
+            <option value="GBP">GBP (£) - {exchangeRates.GBP ? `1 USD = ${exchangeRates.GBP.toFixed(2)} GBP` : 'Loading...'}</option>
+            <option value="JPY">JPY (¥) - {exchangeRates.JPY ? `1 USD = ${exchangeRates.JPY.toFixed(0)} JPY` : 'Loading...'}</option>
+            <option value="CAD">CAD (C$) - {exchangeRates.CAD ? `1 USD = ${exchangeRates.CAD.toFixed(2)} CAD` : 'Loading...'}</option>
+            <option value="AUD">AUD (A$) - {exchangeRates.AUD ? `1 USD = ${exchangeRates.AUD.toFixed(2)} AUD` : 'Loading...'}</option>
           </select>
         </div>
       </div>
