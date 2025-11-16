@@ -108,9 +108,11 @@ export function InputForm({ onSubmit, onImportData, language = 'en' }: InputForm
         id={name}
         type="number"
         {...register(name, {
+          valueAsNumber: true,
           setValueAs: (v) => {
-            if (v === "" || v === undefined) return "";
-            return v;
+            if (v === "" || v === undefined || v === null) return undefined;
+            const num = Number(v);
+            return isNaN(num) ? undefined : num;
           },
         })}
         placeholder={options?.placeholder}
