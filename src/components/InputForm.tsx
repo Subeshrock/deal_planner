@@ -9,6 +9,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Separator } from "./ui/separator";
 import { financialAPI } from "@/lib/financial-api";
+import { t, getCurrencySymbol, type Language } from "@/lib/localization";
 import { useEffect, useState } from "react";
 
 
@@ -18,7 +19,7 @@ type InputFormProps = {
   onImportData?: (data: { year: number; revenue: number }[]) => void;
 };
 
-export function InputForm({ onSubmit, onImportData }: InputFormProps) {
+export function InputForm({ onSubmit, onImportData, language = 'en' }: InputFormProps & { language?: Language }) {
   const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({});
   const [apiLoading, setApiLoading] = useState(false);
 
@@ -80,7 +81,7 @@ export function InputForm({ onSubmit, onImportData }: InputFormProps) {
         if (parsedData.length > 0 && onImportData) {
           onImportData(parsedData);
         } else {
-          alert("Invalid CSV format. Expected columns: year, revenue");
+          alert(t('invalidCsv', language));
         }
       },
       error: () => {
@@ -124,9 +125,9 @@ export function InputForm({ onSubmit, onImportData }: InputFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" aria-labelledby="form-heading">
       {/* Import Data */}
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold">Import Historical Data</h2>
+        <h2 className="text-lg font-semibold">{t('importData', language)}</h2>
         <p className="text-sm text-muted-foreground">
-          Upload a CSV file with historical revenue data (columns: year, revenue) to analyze trends.
+          {t('csvFormat', language)}
         </p>
         <input
           type="file"
@@ -141,33 +142,49 @@ export function InputForm({ onSubmit, onImportData }: InputFormProps) {
 
       {/* Basic Inputs */}
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold">Basic Deal Inputs</h2>
-        {renderInput("annualRevenue", "Annual Revenue ($)", "The expected annual revenue of the business post-acquisition.")}
-        {renderInput("churnRate", "Churn Rate (%)", "Percentage of revenue lost annually due to customer attrition.", {}, { min: 0, max: 100, step: 0.1 })}
-        {renderInput("growthRate", "Growth Rate (%)", "Expected annual revenue growth percentage.", { optional: true }, { min: -100, max: 1000, step: 0.1 })}
-        {renderInput("earnOutPercent", "Earn Out (%)", "Percentage of annual revenue paid as earn-out to the seller.", {}, { min: 0, max: 100, step: 0.1 })}
-        {renderInput("taxRate", "Tax Rate (%)", "Applicable tax rate on proceeds (defaults to 20%).", { optional: true }, { min: 0, max: 100, step: 0.1 })}
+        <h2 className="text-lg font-semibold">{t('basicInputs', language)}</h2>
+        {renderInput("annualRevenue", `${t('annualRevenue', language)} (${getCurrencySymbol(watchedValues.currency || 'USD')})`, "The expected annual revenue of the business post-acquisition.", {}, { min: 1, step: 1000 })}
+        {renderInput("churnRate", `${t('churnRate', language)} (${t('percent', language)})`, "Percentage of revenue lost annually due to customer attrition.", {}, { min: 0, max: 100, step: 0.1 })}
+        {renderInput("growthRate", `${t('growthRate', language)} (${t('percent', language)})`, "Expected annual revenue growth percentage.", { optional: true }, { min: -100, max: 1000, step: 0.1 })}
+        {renderInput("earnOutPercent", `${t('earnOutPercent', language)} (${t('percent', language)})`, "Percentage of annual revenue paid as earn-out to the seller.", {}, { min: 0, max: 100, step: 0.1 })}
+        {renderInput("taxRate", `${t('taxRate', language)} (${t('percent', language)})`, "Applicable tax rate on proceeds (defaults to 20%).", { optional: true }, { min: 0, max: 100, step: 0.1 })}
       </div>
 
       <Separator className="my-4" />
 
       {/* Advanced Inputs */}
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold">Advanced Financing Options</h2>
-          <p className="text-sm text-muted-foreground">
-            All advanced inputs are optional and used for detailed modeling.
-            {apiLoading && " Loading market data..."}
-          </p>
-        {renderInput("earnOutYears", "Earn Out Years", "Number of years the earn-out payments will be made.", { optional: true }, { min: 1, max: 10, step: 1 })}
-        {renderInput("sellerFinancingPercent", "Seller Financing (%)", "Percentage of annual revenue financed by the seller with interest.", {
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold">{t('advancedOptions', language)}</h2>
+        <p className="text-sm text-muted-foreground">
+          All advanced inputs are optional and used for detailed modeling.
+          {apiLoading && " Loading market data..."}
+        </p>
+        {renderInput("earnOutYears", t('earnOutYears', language), "Number of years the earn-out payments will be made.", { optional: true }, { min: 1, max: 10, step: 1 })}
+        {renderInput("sellerFinancingPercent", `${t('sellerFinancingPercent', language)} (${t('percent', language)})`, "Percentage of annual revenue financed by the seller with interest.", {
           optional: true,
         }, { min: 0, max: 100, step: 0.1 })}
-        {renderInput("allCashPercent", "All Cash (%)", "Percentage of annual revenue paid as upfront cash.", { optional: true }, { min: 0, max: 100, step: 0.1 })}
-        {renderInput("interestRate", "Interest Rate (%)", "Annual interest rate for seller financing.", { optional: true }, { min: 0, max: 50, step: 0.1 })}
+        {renderInput("allCashPercent", `${t('allCashPercent', language)} (${t('percent', language)})`, "Percentage of annual revenue paid as upfront cash.", { optional: true }, { min: 0, max: 100, step: 0.1 })}
+        {renderInput("interestRate", `${t('interestRate', language)} (${t('percent', language)})`, "Annual interest rate for seller financing.", { optional: true }, { min: 0, max: 50, step: 0.1 })}
+        {renderInput("inflationRate", `${t('inflationRate', language)} (${t('percent', language)})`, "Expected annual inflation rate for revenue adjustments.", { optional: true }, { min: 0, max: 20, step: 0.1 })}
+        <div className="space-y-1">
+          <Label htmlFor="currency">{t('currency', language)}</Label>
+          <select
+            id="currency"
+            {...register("currency")}
+            className="w-full p-2 border rounded"
+          >
+            <option value="USD">USD ($) - Base Currency</option>
+            <option value="EUR">EUR (€) - {exchangeRates.EUR ? `1 USD = ${exchangeRates.EUR.toFixed(2)} EUR` : 'Rate unavailable'}</option>
+            <option value="GBP">GBP (£) - {exchangeRates.GBP ? `1 USD = ${exchangeRates.GBP.toFixed(2)} GBP` : 'Rate unavailable'}</option>
+            <option value="JPY">JPY (¥) - {exchangeRates.JPY ? `1 USD = ${exchangeRates.JPY.toFixed(0)} JPY` : 'Rate unavailable'}</option>
+            <option value="CAD">CAD (C$) - {exchangeRates.CAD ? `1 USD = ${exchangeRates.CAD.toFixed(2)} CAD` : 'Rate unavailable'}</option>
+            <option value="AUD">AUD (A$) - {exchangeRates.AUD ? `1 USD = ${exchangeRates.AUD.toFixed(2)} AUD` : 'Rate unavailable'}</option>
+          </select>
+        </div>
       </div>
 
       <Button type="submit" className="mt-4 w-full">
-        Calculate
+        {t('calculate', language)}
       </Button>
     </form>
   );
