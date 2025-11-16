@@ -59,20 +59,23 @@ export function InputForm({ onSubmit, onChange }: InputFormProps) {
     const value = watchedValues[name] as number;
     return (
       <div key={name} className="space-y-1">
-        <Label htmlFor={name} title={tooltip} className="cursor-help">
-          {label}: {value}{" "}
+        <Label htmlFor={name} title={tooltip}>
+          {label}{" "}
           {options?.optional && (
             <span className="text-sm text-muted-foreground">(optional)</span>
           )}
         </Label>
-        <Slider
-          value={[value]}
-          onValueChange={(vals) => setValue(name, vals[0])}
-          min={min}
-          max={max}
-          step={step}
-          className="w-full"
-        />
+        <div className="flex items-center space-x-2">
+          <Slider
+            value={[value]}
+            onValueChange={(vals) => setValue(name, vals[0])}
+            min={min}
+            max={max}
+            step={step}
+            className="flex-1"
+          />
+          <span className="text-sm font-medium w-12 text-right">{value}</span>
+        </div>
       </div>
     );
   };
@@ -114,10 +117,10 @@ export function InputForm({ onSubmit, onChange }: InputFormProps) {
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">Basic Deal Inputs</h2>
         {renderInput("annualRevenue", "Annual Revenue ($)", "The expected annual revenue of the business post-acquisition.", {}, { min: 1, step: 1000 })}
-        {renderSliderInput("churnRate", "Churn Rate (%)", "Percentage of revenue lost annually due to customer attrition.", 0, 100, 0.1)}
-        {renderSliderInput("growthRate", "Growth Rate (%)", "Expected annual revenue growth percentage.", -100, 1000, 0.1, { optional: true })}
-        {renderSliderInput("earnOutPercent", "Earn Out (%)", "Percentage of annual revenue paid as earn-out to the seller.", 0, 100, 0.1)}
-        {renderSliderInput("taxRate", "Tax Rate (%)", "Applicable tax rate on proceeds (defaults to 20%).", 0, 100, 0.1, { optional: true })}
+        {renderInput("churnRate", "Churn Rate (%)", "Percentage of revenue lost annually due to customer attrition.", {}, { min: 0, max: 100, step: 0.1 })}
+        {renderInput("growthRate", "Growth Rate (%)", "Expected annual revenue growth percentage.", { optional: true }, { min: -100, max: 1000, step: 0.1 })}
+        {renderInput("earnOutPercent", "Earn Out (%)", "Percentage of annual revenue paid as earn-out to the seller.", {}, { min: 0, max: 100, step: 0.1 })}
+        {renderInput("taxRate", "Tax Rate (%)", "Applicable tax rate on proceeds (defaults to 20%).", { optional: true }, { min: 0, max: 100, step: 0.1 })}
       </div>
 
       <Separator className="my-4" />
@@ -129,11 +132,11 @@ export function InputForm({ onSubmit, onChange }: InputFormProps) {
           All advanced inputs are optional and used for detailed modeling.
         </p>
         {renderInput("earnOutYears", "Earn Out Years", "Number of years the earn-out payments will be made.", { optional: true }, { min: 1, max: 10, step: 1 })}
-        {renderSliderInput("sellerFinancingPercent", "Seller Financing (%)", "Percentage of annual revenue financed by the seller with interest.", 0, 100, 0.1, {
+        {renderInput("sellerFinancingPercent", "Seller Financing (%)", "Percentage of annual revenue financed by the seller with interest.", {
           optional: true,
-        })}
-        {renderSliderInput("allCashPercent", "All Cash (%)", "Percentage of annual revenue paid as upfront cash.", 0, 100, 0.1, { optional: true })}
-        {renderSliderInput("interestRate", "Interest Rate (%)", "Annual interest rate for seller financing.", 0, 50, 0.1, { optional: true })}
+        }, { min: 0, max: 100, step: 0.1 })}
+        {renderInput("allCashPercent", "All Cash (%)", "Percentage of annual revenue paid as upfront cash.", { optional: true }, { min: 0, max: 100, step: 0.1 })}
+        {renderInput("interestRate", "Interest Rate (%)", "Annual interest rate for seller financing.", { optional: true }, { min: 0, max: 50, step: 0.1 })}
       </div>
 
       <Button type="submit" className="mt-4 w-full">
