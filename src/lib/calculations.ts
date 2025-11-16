@@ -46,8 +46,6 @@ export function calculateDealScenarios(data: DealFormInput): { chartData: ChartD
   const totalSellerFinancing = chartData.reduce((acc, d) => acc + d.sellerFinancing, 0);
   const totalAllCash = annualRevenue * allCashFraction;
 
-  const grossProceeds = Math.max(totalEarnOut, totalAllCash, totalSellerFinancing);
-
   return {
     chartData,
     summary: {
