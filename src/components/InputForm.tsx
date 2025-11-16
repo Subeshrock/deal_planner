@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Separator } from "./ui/separator";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 type InputFormProps = {
   onSubmit: (data: DealFormInput) => void;
@@ -35,16 +36,26 @@ export function InputForm({ onSubmit }: InputFormProps) {
   const renderInput = (
     name: keyof DealFormInput,
     label: string,
+    tooltip: string,
     options?: { optional?: boolean; placeholder?: string },
     inputProps?: React.InputHTMLAttributes<HTMLInputElement>
   ) => (
     <div key={name} className="space-y-1">
-      <Label htmlFor={name}>
-        {label}{" "}
-        {options?.optional && (
-          <span className="text-sm text-muted-foreground">(optional)</span>
-        )}
-      </Label>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Label htmlFor={name} className="cursor-help">
+              {label}{" "}
+              {options?.optional && (
+                <span className="text-sm text-muted-foreground">(optional)</span>
+              )}
+            </Label>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{tooltip}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <Input
         id={name}
         type="number"
@@ -82,12 +93,12 @@ export function InputForm({ onSubmit }: InputFormProps) {
         <p className="text-sm text-muted-foreground">
           All advanced inputs are optional and used for detailed modeling.
         </p>
-        {renderInput("earnOutYears", "Earn Out Years", { optional: true }, { min: 1, max: 10, step: 1 })}
-        {renderInput("sellerFinancingPercent", "Seller Financing (%)", {
+        {renderInput("earnOutYears", "Earn Out Years", "Number of years the earn-out payments will be made.", { optional: true }, { min: 1, max: 10, step: 1 })}
+        {renderInput("sellerFinancingPercent", "Seller Financing (%)", "Percentage of annual revenue financed by the seller with interest.", {
           optional: true,
         }, { min: 0, max: 100, step: 0.1 })}
-        {renderInput("allCashPercent", "All Cash (%)", { optional: true }, { min: 0, max: 100, step: 0.1 })}
-        {renderInput("interestRate", "Interest Rate (%)", { optional: true }, { min: 0, max: 50, step: 0.1 })}
+        {renderInput("allCashPercent", "All Cash (%)", "Percentage of annual revenue paid as upfront cash.", { optional: true }, { min: 0, max: 100, step: 0.1 })}
+        {renderInput("interestRate", "Interest Rate (%)", "Annual interest rate for seller financing.", { optional: true }, { min: 0, max: 50, step: 0.1 })}
       </div>
 
       <Button type="submit" className="mt-4 w-full">

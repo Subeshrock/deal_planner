@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { InputForm } from "@/components/InputForm";
 import { calculateDealScenarios } from "@/lib/calculations";
 import { Chart } from "@/components/ChartDisplay";
@@ -24,9 +24,22 @@ export default function DealPage() {
   const [pdfData, setPdfData] = useState<PDFData>()
   const [chartImage, setChartImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  useEffect(() => {
+    const hasSeenTutorial = localStorage.getItem("deal-simulator-tutorial-seen");
+    if (!hasSeenTutorial) {
+      setShowTutorial(true);
+    }
+  }, []);
 
   const handleChartCapture = (img: string) => {
     setChartImage(img);
+  };
+
+  const dismissTutorial = () => {
+    setShowTutorial(false);
+    localStorage.setItem("deal-simulator-tutorial-seen", "true");
   };
 
   const handleCalculate = (data: DealFormInput) => {
@@ -46,6 +59,23 @@ export default function DealPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
+      {showTutorial && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg max-w-md mx-4">
+            <h2 className="text-xl font-bold mb-4">Welcome to Deal Simulator!</h2>
+            <p className="mb-4">
+              This tool helps you model different payout structures for business acquisitions.
+              Fill in the inputs on the left, and see the results on the right.
+            </p>
+            <ul className="list-disc list-inside mb-4 space-y-1">
+              <li>Hover over labels for explanations</li>
+              <li>Adjust parameters to compare scenarios</li>
+              <li>Export detailed PDF reports</li>
+            </ul>
+            <Button onClick={dismissTutorial} className="w-full">Get Started</Button>
+          </div>
+        </div>
+      )}
       <h1 className="text-3xl font-bold text-center mb-8">Deal Calculator</h1>
 
       <div className="flex flex-col md:flex-row gap-8">
