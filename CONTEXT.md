@@ -15,9 +15,9 @@ Transform the deal simulator into a comprehensive M&A financial modeling platfor
 4. **Polish & Scale** (Ongoing): Accessibility, PWA, localization, advanced financing.
 
 ## Progress Tracking
-- Completed: Basic app structure, core calculations, UI components.
-- In Progress: Phase 1 - Foundation & Robustness.
-- Pending: All 20 todos from planning.
+- Completed: Basic app structure, core calculations, UI components, Phase 1 (Foundation & Robustness).
+- In Progress: Phase 2 - Core Power & Analytics.
+- Pending: Remaining todos from planning.
 
 ## Git Strategy
 - **Branches**: 
