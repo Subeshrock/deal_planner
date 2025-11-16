@@ -20,20 +20,6 @@ interface ChartProps {
 export function Chart({ data, hidden = false }: ChartProps) {
   const chartRef = useRef<HTMLDivElement>(null);
 
-  const handleExportChart = async () => {
-    if (chartRef.current) {
-      try {
-        const canvas = await html2canvas(chartRef.current);
-        const link = document.createElement("a");
-        link.download = "deal-chart.png";
-        link.href = canvas.toDataURL();
-        link.click();
-      } catch (error) {
-        console.error("Failed to export chart:", error);
-      }
-    }
-  };
-
   return (
     <div className={hidden ? "hidden" : ""}>
       <div
