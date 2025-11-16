@@ -20,8 +20,6 @@ export function InputForm({ onSubmit, onChange }: InputFormProps) {
   const {
     register,
     handleSubmit,
-    watch,
-    setValue,
     formState: { errors },
   } = useForm<DealFormInput>({
     resolver: zodResolver(DealFormSchema),
@@ -40,12 +38,7 @@ export function InputForm({ onSubmit, onChange }: InputFormProps) {
 
 
 
-  // Trigger onChange for real-time updates
-  useEffect(() => {
-    if (onChange) {
-      onChange(watchedValues);
-    }
-  }, [watchedValues, onChange]);
+
 
 
 
