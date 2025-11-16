@@ -8,8 +8,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useRef } from "react";
-import html2canvas from "html2canvas";
-import { Button } from "./ui/button";
 
 import type { ChartData } from "@/types/chart";
 
@@ -56,9 +54,9 @@ export function Chart({ data, hidden = false }: ChartProps) {
       </div>
       {!hidden && (
         <div className="mt-2 text-right">
-          <Button variant="outline" size="sm" onClick={handleExportChart} aria-label="Export chart as PNG image">
-            Export Chart as PNG
-          </Button>
+          <p className="text-xs text-gray-500">
+            Right-click or take screenshot to save chart
+          </p>
         </div>
       )}
     </div>
