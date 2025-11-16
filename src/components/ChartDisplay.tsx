@@ -56,7 +56,7 @@ export function Chart({ data, hidden = false }: ChartProps) {
       </div>
       {!hidden && (
         <div className="mt-2 text-right">
-          <Button variant="outline" size="sm" onClick={handleExportChart}>
+          <Button variant="outline" size="sm" onClick={handleExportChart} aria-label="Export chart as PNG image">
             Export Chart as PNG
           </Button>
         </div>
