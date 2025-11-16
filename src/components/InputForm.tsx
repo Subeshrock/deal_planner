@@ -45,8 +45,9 @@ export function InputForm({ onSubmit, onImportData }: InputFormProps) {
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
-      complete: (results: Papa.ParseResult<Record<string, unknown>>) => {
-        const data = results.data as Record<string, unknown>[];
+      complete: (results: any) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const data = results.data as any[];
         const parsedData = data
           .map((row) => ({
             year: parseInt(row.year || row.Year || row.YEAR),
