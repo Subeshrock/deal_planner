@@ -45,7 +45,7 @@ export function InputForm({ onSubmit, onImportData }: InputFormProps) {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
-        const data = results.data as any[];
+        const data = results.data as Record<string, unknown>[];
         const parsedData = data
           .map((row) => ({
             year: parseInt(row.year || row.Year || row.YEAR),
