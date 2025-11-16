@@ -194,11 +194,16 @@ npm run lint     # Run ESLint
 
 ### Testing
 ```bash
-# Run tests (when implemented)
+# Run tests
 npm run test
 npm run test:watch
 npm run test:coverage
 ```
+
+The project includes comprehensive unit tests for:
+- Financial calculations (NPV, IRR, Monte Carlo)
+- Schema validation and input constraints
+- Edge cases and error handling
 
 ## 🤝 Contributing
 

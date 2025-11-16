@@ -2,7 +2,8 @@
 
 
 import { useForm } from "react-hook-form";
-import Papa from "papaparse";
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const Papa = require("papaparse");
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DealFormSchema, DealFormInput } from "@/lib/schema";
 import { Button } from "./ui/button";
@@ -44,9 +45,8 @@ export function InputForm({ onSubmit, onImportData }: InputFormProps) {
     Papa.parse(file, {
       header: true,
       skipEmptyLines: true,
-      complete: (results) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const data = results.data as any[];
+      complete: (results: Papa.ParseResult<Record<string, unknown>>) => {
+        const data = results.data as Record<string, unknown>[];
         const parsedData = data
           .map((row) => ({
             year: parseInt(row.year || row.Year || row.YEAR),
