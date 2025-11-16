@@ -7,28 +7,18 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { useEffect, useRef } from "react";
-// import html2canvas from "html2canvas";
+import { useRef } from "react";
+
+import type { ChartData } from "@/types/chart";
 
 interface ChartProps {
-    data?: any;
-    onCapture?: any;
-    hidden?: boolean | undefined;
+    data?: ChartData[];
+    onCapture?: (img: string) => void;
+    hidden?: boolean;
 }
 
-export function Chart({ data, onCapture, hidden = false }: ChartProps) {
+export function Chart({ data, hidden = false }: ChartProps) {
   const chartRef = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   if (onCapture && chartRef.current) {
-  //     setTimeout(() => {
-  //       html2canvas(chartRef.current!).then((canvas) => {
-  //         const image = canvas.toDataURL("image/png");
-  //         onCapture(image);
-  //       });
-  //     }, 500); // wait for Recharts to render
-  //   }
-  // }, [onCapture]);
 
   return (
     <div

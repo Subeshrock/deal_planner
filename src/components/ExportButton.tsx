@@ -37,12 +37,11 @@ export function ExportButton({
         taxRate={taxRate}
         summary={summary}
         yearlyData={yearlyData}
-        chartImage={chartImage}
       />
     );
 
-    const asPdf = pdf(); // ✅ fixed
-    await asPdf.updateContainer(doc); // ✅ also await this
+    const asPdf = pdf();
+    asPdf.updateContainer(doc);
     const blob = await asPdf.toBlob();
 
     const url = URL.createObjectURL(blob);

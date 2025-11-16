@@ -24,6 +24,10 @@ export default function DealPage() {
   const [pdfData, setPdfData] = useState<PDFData>()
   const [chartImage, setChartImage] = useState<string | null>(null);
 
+  const handleChartCapture = (img: string) => {
+    setChartImage(img);
+  };
+
   const handleCalculate = (data: DealFormInput) => {
     const { annualRevenue, churnRate, growthRate, earnOutPercent, taxRate } = data;
     setPdfData({churn: churnRate, revenue: annualRevenue, growth: growthRate, earnOutPercentage: earnOutPercent, taxRate});
@@ -49,11 +53,11 @@ export default function DealPage() {
               <Chart data={chartData} />
               {/* 🔁 Hidden chart used only for image capture */}
               {chartImage === null && (
-                <Chart
-                  data={chartData}
-                  hidden
-                  onCapture={(img) => setChartImage(img)}
-                />
+               <Chart
+                 data={chartData}
+                 hidden
+                 onCapture={handleChartCapture}
+               />
               )}
               <Summary summary={summary} />
               <ExportButton summary={summary} revenue={pdfData.revenue} churn={pdfData?.churn} earnOutPercentage={pdfData?.earnOutPercentage} growth={pdfData?.growth} taxRate={pdfData?.taxRate} yearlyData={chartData} chartImage={chartImage} />
