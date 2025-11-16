@@ -2,6 +2,7 @@
 
 
 import { useForm } from "react-hook-form";
+import Papa from "papaparse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DealFormSchema, DealFormInput } from "@/lib/schema";
 import { Button } from "./ui/button";
@@ -36,11 +37,33 @@ export function InputForm({ onSubmit, onImportData }: InputFormProps) {
     },
   });
 
+  const handleImportCSV = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
 
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        const data = results.data as any[];
+        const parsedData = data
+          .map((row) => ({
+            year: parseInt(row.year || row.Year || row.YEAR),
+            revenue: parseFloat(row.revenue || row.Revenue || row.REVENUE),
+          }))
+          .filter((item) => !isNaN(item.year) && !isNaN(item.revenue));
 
-
-
-
+        if (parsedData.length > 0 && onImportData) {
+          onImportData(parsedData);
+        } else {
+          alert("Invalid CSV format. Expected columns: year, revenue");
+        }
+      },
+      error: () => {
+        alert("Error parsing CSV file");
+      },
+    });
+  };
 
   const renderInput = (
     name: keyof DealFormInput,
