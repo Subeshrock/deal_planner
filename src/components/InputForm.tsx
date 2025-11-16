@@ -58,22 +58,13 @@ export function InputForm({ onSubmit, onChange }: InputFormProps) {
   ) => {
     const value = watchedValues[name] as number;
     return (
-      <div key={name} className="space-y-2">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Label htmlFor={name} className="cursor-help">
-                {label}: {value}{" "}
-                {options?.optional && (
-                  <span className="text-sm text-muted-foreground">(optional)</span>
-                )}
-              </Label>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{tooltip}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+      <div key={name} className="space-y-1">
+        <Label htmlFor={name} title={tooltip} className="cursor-help">
+          {label}: {value}{" "}
+          {options?.optional && (
+            <span className="text-sm text-muted-foreground">(optional)</span>
+          )}
+        </Label>
         <Slider
           value={[value]}
           onValueChange={(vals) => setValue(name, vals[0])}
