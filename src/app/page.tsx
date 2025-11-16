@@ -61,14 +61,13 @@ export default function DealPage() {
   const handleFormChange = (data: DealFormInput) => {
     // Real-time calculation for sensitivity analysis
     try {
-      setError(null);
       const { annualRevenue, churnRate, growthRate, earnOutPercent, taxRate } = data;
       setPdfData({churn: churnRate, revenue: annualRevenue, growth: growthRate, earnOutPercentage: earnOutPercent, taxRate});
       const { chartData, summary } = calculateDealScenarios(data);
       setChartData(chartData);
       setSummary(summary);
-    } catch (err) {
-      // Don't set error for real-time, only on submit
+    } catch {
+      // Ignore errors in real-time updates
     }
   };
 
