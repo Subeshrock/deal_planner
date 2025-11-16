@@ -13,10 +13,10 @@ import { Separator } from "./ui/separator";
 
 type InputFormProps = {
   onSubmit: (data: DealFormInput) => void;
-  onChange?: (data: DealFormInput) => void;
+  onImportData?: (data: { year: number; revenue: number }[]) => void;
 };
 
-export function InputForm({ onSubmit, onChange }: InputFormProps) {
+export function InputForm({ onSubmit, onImportData }: InputFormProps) {
   const {
     register,
     handleSubmit,
