@@ -9,7 +9,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Separator } from "./ui/separator";
 
-import { Slider } from "./ui/slider";
+
 
 type InputFormProps = {
   onSubmit: (data: DealFormInput) => void;
@@ -38,7 +38,7 @@ export function InputForm({ onSubmit, onChange }: InputFormProps) {
     },
   });
 
-  const watchedValues = watch();
+
 
   // Trigger onChange for real-time updates
   useEffect(() => {
@@ -47,38 +47,7 @@ export function InputForm({ onSubmit, onChange }: InputFormProps) {
     }
   }, [watchedValues, onChange]);
 
-  const renderSliderInput = (
-    name: keyof DealFormInput,
-    label: string,
-    tooltip: string,
-    min: number,
-    max: number,
-    step: number,
-    options?: { optional?: boolean; placeholder?: string },
-  ) => {
-    const value = watchedValues[name] as number;
-    return (
-      <div key={name} className="space-y-1">
-        <Label htmlFor={name} title={tooltip}>
-          {label}{" "}
-          {options?.optional && (
-            <span className="text-sm text-muted-foreground">(optional)</span>
-          )}
-        </Label>
-        <div className="flex items-center space-x-2">
-          <Slider
-            value={[value]}
-            onValueChange={(vals) => setValue(name, vals[0])}
-            min={min}
-            max={max}
-            step={step}
-            className="flex-1"
-          />
-          <span className="text-sm font-medium w-12 text-right">{value}</span>
-        </div>
-      </div>
-    );
-  };
+
 
   const renderInput = (
     name: keyof DealFormInput,
