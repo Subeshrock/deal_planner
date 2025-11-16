@@ -119,7 +119,7 @@ export function InputForm({ onSubmit, onImportData }: InputFormProps) {
       {/* Basic Inputs */}
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">Basic Deal Inputs</h2>
-        {renderInput("annualRevenue", "Annual Revenue ($)", "The expected annual revenue of the business post-acquisition.", {}, { min: 1, step: 1000 })}
+        {renderInput("annualRevenue", "Annual Revenue ($)", "The expected annual revenue of the business post-acquisition.")}
         {renderInput("churnRate", "Churn Rate (%)", "Percentage of revenue lost annually due to customer attrition.", {}, { min: 0, max: 100, step: 0.1 })}
         {renderInput("growthRate", "Growth Rate (%)", "Expected annual revenue growth percentage.", { optional: true }, { min: -100, max: 1000, step: 0.1 })}
         {renderInput("earnOutPercent", "Earn Out (%)", "Percentage of annual revenue paid as earn-out to the seller.", {}, { min: 0, max: 100, step: 0.1 })}
