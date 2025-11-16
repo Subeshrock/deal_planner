@@ -109,7 +109,11 @@ export function InputForm({ onSubmit, onImportData, language = 'en' }: InputForm
         type="number"
         {...register(name, {
           valueAsNumber: true,
-          setValueAs: (v) => (v === "" ? undefined : Number(v)),
+          setValueAs: (v) => {
+            if (v === "" || v === undefined) return undefined;
+            const num = Number(v);
+            return isNaN(num) ? undefined : num;
+          },
         })}
         placeholder={options?.placeholder}
         {...inputProps}
