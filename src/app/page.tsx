@@ -60,7 +60,7 @@ export default function DealPage() {
                />
               )}
               <Summary summary={summary} />
-              <ExportButton summary={summary} revenue={pdfData.revenue} churn={pdfData?.churn} earnOutPercentage={pdfData?.earnOutPercentage} growth={pdfData?.growth} taxRate={pdfData?.taxRate} yearlyData={chartData} chartImage={chartImage} />
+               <ExportButton summary={summary} revenue={pdfData.revenue} churn={pdfData?.churn} earnOutPercentage={pdfData?.earnOutPercentage} growth={pdfData?.growth} taxRate={pdfData?.taxRate} yearlyData={chartData} />
             </>
           )}
         </div>

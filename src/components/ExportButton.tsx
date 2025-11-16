@@ -13,7 +13,6 @@ type ExportButtonProps = {
   earnOutPercentage?: number;
   taxRate?: number;
   yearlyData: { year: string; earnOut: number; sellerFinancing: number; allCash: number }[];
-  chartImage?: string | null; // 🔁 ADD THIS
 };
 
 export function ExportButton({
@@ -24,7 +23,6 @@ export function ExportButton({
   earnOutPercentage = 30,
   taxRate = 20,
   yearlyData,
-  chartImage,
 }: ExportButtonProps) {
   const handleExport = async () => {
   try {
