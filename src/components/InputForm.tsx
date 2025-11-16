@@ -67,11 +67,11 @@ export function InputForm({ onSubmit }: InputFormProps) {
       {/* Basic Inputs */}
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">Basic Deal Inputs</h2>
-        {renderInput("annualRevenue", "Annual Revenue ($)")}
-        {renderInput("churnRate", "Churn Rate (%)")}
-        {renderInput("growthRate", "Growth Rate (%)", { optional: true })}
-        {renderInput("earnOutPercent", "Earn Out (%)")}
-        {renderInput("taxRate", "Tax Rate (%)", { optional: true })}
+        {renderInput("annualRevenue", "Annual Revenue ($)", {}, { min: 1, step: 1000 })}
+        {renderInput("churnRate", "Churn Rate (%)", {}, { min: 0, max: 100, step: 0.1 })}
+        {renderInput("growthRate", "Growth Rate (%)", { optional: true }, { min: -100, max: 1000, step: 0.1 })}
+        {renderInput("earnOutPercent", "Earn Out (%)", {}, { min: 0, max: 100, step: 0.1 })}
+        {renderInput("taxRate", "Tax Rate (%)", { optional: true }, { min: 0, max: 100, step: 0.1 })}
       </div>
 
       <Separator className="my-4" />
@@ -82,12 +82,12 @@ export function InputForm({ onSubmit }: InputFormProps) {
         <p className="text-sm text-muted-foreground">
           All advanced inputs are optional and used for detailed modeling.
         </p>
-        {renderInput("earnOutYears", "Earn Out Years", { optional: true }, { min: 1, step: 1 })}
+        {renderInput("earnOutYears", "Earn Out Years", { optional: true }, { min: 1, max: 10, step: 1 })}
         {renderInput("sellerFinancingPercent", "Seller Financing (%)", {
           optional: true,
-        })}
-        {renderInput("allCashPercent", "All Cash (%)", { optional: true })}
-        {renderInput("interestRate", "Interest Rate (%)", { optional: true })}
+        }, { min: 0, max: 100, step: 0.1 })}
+        {renderInput("allCashPercent", "All Cash (%)", { optional: true }, { min: 0, max: 100, step: 0.1 })}
+        {renderInput("interestRate", "Interest Rate (%)", { optional: true }, { min: 0, max: 50, step: 0.1 })}
       </div>
 
       <Button type="submit" className="mt-4 w-full">
