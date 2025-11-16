@@ -2,7 +2,36 @@ import { DealFormInput } from "./schema";
 import type { DealSummary } from "../types/deal";
 import { ChartData } from "@/types/chart";
 
-export function calculateDealScenarios(data: DealFormInput): { chartData: ChartData[]; summary: DealSummary } {
+// Helper functions for financial metrics
+function calculateNPV(cashFlows: number[], discountRate: number): number {
+  return cashFlows.reduce((npv, cf, t) => npv + cf / Math.pow(1 + discountRate, t), 0);
+}
+
+function calculateIRR(cashFlows: number[]): number {
+  // Simple approximation using binary search
+  let low = -0.99;
+  let high = 10;
+  let mid = 0;
+  for (let i = 0; i < 100; i++) {
+    mid = (low + high) / 2;
+    const npv = calculateNPV(cashFlows, mid);
+    if (Math.abs(npv) < 0.01) break;
+    if (npv > 0) low = mid;
+    else high = mid;
+  }
+  return mid * 100; // Return as percentage
+}
+
+function calculatePaybackPeriod(cashFlows: number[]): number {
+  let cumulative = 0;
+  for (let i = 0; i < cashFlows.length; i++) {
+    cumulative += cashFlows[i];
+    if (cumulative >= 0) return i;
+  }
+  return cashFlows.length;
+}
+
+export function calculateDealScenarios(data: DealFormInput): { chartData: ChartData[]; summary: DealSummary; metrics: { npv: number; irr: number; paybackPeriod: number } } {
   const {
     annualRevenue,
     churnRate,
@@ -53,6 +82,15 @@ export function calculateDealScenarios(data: DealFormInput): { chartData: ChartD
   const totalSellerFinancing = chartData.reduce((acc, d) => acc + d.sellerFinancing, 0);
   const totalAllCash = annualRevenue * allCashFraction;
 
+  // Calculate cash flows for metrics (negative for outflows, positive for inflows)
+  // Assuming buyer pays, so payouts are positive for seller
+  const cashFlows = chartData.map(d => d.earnOut + d.sellerFinancing + d.allCash);
+  // Add initial cash if any (but allCash is year 1, already included)
+
+  const npv = calculateNPV(cashFlows, interest / 100);
+  const irr = calculateIRR(cashFlows);
+  const paybackPeriod = calculatePaybackPeriod(cashFlows);
+
   return {
     chartData,
     summary: {
@@ -71,6 +109,11 @@ export function calculateDealScenarios(data: DealFormInput): { chartData: ChartD
         taxes: Math.round(totalAllCash * taxFraction),
         net: Math.round(totalAllCash * (1 - taxFraction)),
       },
+    },
+    metrics: {
+      npv: Math.round(npv),
+      irr: Math.round(irr * 100) / 100, // Round to 2 decimals
+      paybackPeriod,
     },
   };
 }
