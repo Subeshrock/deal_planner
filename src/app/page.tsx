@@ -6,6 +6,7 @@ import { calculateDealScenarios } from "@/lib/calculations";
 import { Chart } from "@/components/ChartDisplay";
 import { Summary } from "@/components/SummaryCard";
 import { ExportButton } from "@/components/ExportButton";
+import { Button } from "@/components/ui/button";
 import type { DealFormInput } from "@/lib/schema";
 import type { ChartData } from "@/types/chart";
 import type { DealSummary } from "@/types/deal";
