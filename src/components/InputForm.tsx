@@ -143,7 +143,7 @@ export function InputForm({ onSubmit, onImportData, language = 'en' }: InputForm
       {/* Basic Inputs */}
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">{t('basicInputs', language)}</h2>
-        {renderInput("annualRevenue", `${t('annualRevenue', language)} (${getCurrencySymbol('USD')})`, "The expected annual revenue of the business post-acquisition.", {}, { min: 1, step: 1000 })}
+        {renderInput("annualRevenue", `${t('annualRevenue', language)} (${getCurrencySymbol('USD')})`, "The expected annual revenue of the business post-acquisition.", {}, { min: 1 })}
         {renderInput("churnRate", `${t('churnRate', language)} (${t('percent', language)})`, "Percentage of revenue lost annually due to customer attrition.", {}, { min: 0, max: 100, step: 0.1 })}
         {renderInput("growthRate", `${t('growthRate', language)} (${t('percent', language)})`, "Expected annual revenue growth percentage.", { optional: true }, { min: -100, max: 1000, step: 0.1 })}
         {renderInput("earnOutPercent", `${t('earnOutPercent', language)} (${t('percent', language)})`, "Percentage of annual revenue paid as earn-out to the seller.", {}, { min: 0, max: 100, step: 0.1 })}
