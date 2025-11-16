@@ -7,46 +7,60 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { useEffect, useRef } from "react";
-// import html2canvas from "html2canvas";
+import { useRef } from "react";
+import html2canvas from "html2canvas";
+import { Button } from "./ui/button";
+
+import type { ChartData } from "@/types/chart";
 
 interface ChartProps {
-    data?: any;
-    onCapture?: any;
-    hidden?: boolean | undefined;
+    data?: ChartData[];
+    onCapture?: (img: string) => void;
+    hidden?: boolean;
 }
 
-export function Chart({ data, onCapture, hidden = false }: ChartProps) {
+export function Chart({ data, hidden = false }: ChartProps) {
   const chartRef = useRef<HTMLDivElement>(null);
 
-  // useEffect(() => {
-  //   if (onCapture && chartRef.current) {
-  //     setTimeout(() => {
-  //       html2canvas(chartRef.current!).then((canvas) => {
-  //         const image = canvas.toDataURL("image/png");
-  //         onCapture(image);
-  //       });
-  //     }, 500); // wait for Recharts to render
-  //   }
-  // }, [onCapture]);
+  const handleExportChart = async () => {
+    if (chartRef.current) {
+      try {
+        const canvas = await html2canvas(chartRef.current);
+        const link = document.createElement("a");
+        link.download = "deal-chart.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      } catch (error) {
+        console.error("Failed to export chart:", error);
+      }
+    }
+  };
 
   return (
-    <div
-      ref={chartRef}
-      className="h-80"
-      style={hidden ? { position: "absolute", left: "-9999px" } : {}}
-    >
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data}>
-          <XAxis dataKey="year" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="earnOut" fill="#3b82f6" name="Earn Out" />
-          <Bar dataKey="sellerFinancing" fill="#10b981" name="Seller Financing" />
-          <Bar dataKey="allCash" fill="#f59e0b" name="All Cash" />
-        </BarChart>
-      </ResponsiveContainer>
+    <div className={hidden ? "hidden" : ""}>
+      <div
+        ref={chartRef}
+        className="h-80"
+      >
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={data}>
+            <XAxis dataKey="year" />
+            <YAxis />
+            <Tooltip formatter={(value) => [`$${value.toLocaleString()}`, ""]} />
+            <Legend />
+            <Bar dataKey="earnOut" fill="#3b82f6" name="Earn Out" />
+            <Bar dataKey="sellerFinancing" fill="#10b981" name="Seller Financing" />
+            <Bar dataKey="allCash" fill="#f59e0b" name="All Cash" />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+      {!hidden && (
+        <div className="mt-2 text-right">
+          <Button variant="outline" size="sm" onClick={handleExportChart} aria-label="Export chart as PNG image">
+            Export Chart as PNG
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

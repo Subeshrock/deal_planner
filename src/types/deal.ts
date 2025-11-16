@@ -3,3 +3,9 @@ export type DealSummary = {
   sellerFinancing: { total: number; taxes: number; net: number };
   allCash: { total: number; taxes: number; net: number };
 };
+
+export type DealMetrics = {
+  npv: number;
+  irr: number;
+  paybackPeriod: number;
+};
