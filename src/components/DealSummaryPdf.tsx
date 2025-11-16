@@ -114,6 +114,11 @@ type DealSummaryProps = {
     allCash: ScenarioValues;
   };
   yearlyData: YearlyData[];
+  metrics?: {
+    npv: number;
+    irr: number;
+    paybackPeriod: number;
+  };
 };
 
 const formatCurrency = (val: number) =>
@@ -127,6 +132,7 @@ export const DealSummaryPdf = ({
   taxRate = 20,
   summary,
   yearlyData,
+  metrics,
 }: DealSummaryProps) => {
   return (
     <Document>

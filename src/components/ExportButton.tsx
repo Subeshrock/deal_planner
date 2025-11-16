@@ -2,11 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { DealSummaryPdf } from "@/components/DealSummaryPdf"; // adjust path as needed
-import type { DealSummary } from "@/types/deal";
+import type { DealSummary, DealMetrics } from "@/types/deal";
 import { pdf } from "@react-pdf/renderer";
 
 type ExportButtonProps = {
   summary: DealSummary;
+  metrics?: DealMetrics;
   revenue: number;
   churn: number;
   growth?: number;
@@ -17,6 +18,7 @@ type ExportButtonProps = {
 
 export function ExportButton({
   summary,
+  metrics,
   revenue,
   churn,
   growth,
@@ -34,6 +36,7 @@ export function ExportButton({
         earnOutPercentage={earnOutPercentage}
         taxRate={taxRate}
         summary={summary}
+        metrics={metrics}
         yearlyData={yearlyData}
       />
     );

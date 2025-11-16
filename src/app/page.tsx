@@ -9,7 +9,7 @@ import { ExportButton } from "@/components/ExportButton";
 import { Button } from "@/components/ui/button";
 import type { DealFormInput } from "@/lib/schema";
 import type { ChartData } from "@/types/chart";
-import type { DealSummary } from "@/types/deal";
+import type { DealSummary, DealMetrics } from "@/types/deal";
 
 interface PDFData {
   revenue: number;
@@ -22,6 +22,7 @@ interface PDFData {
 export default function DealPage() {
   const [chartData, setChartData] = useState<ChartData[] | null>(null);
   const [summary, setSummary] = useState<DealSummary | null>(null);
+  const [metrics, setMetrics] = useState<DealMetrics | null>(null);
   const [pdfData, setPdfData] = useState<PDFData>()
   const [chartImage, setChartImage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -55,6 +56,7 @@ export default function DealPage() {
       setError(err instanceof Error ? err.message : "An error occurred during calculation");
       setChartData(null);
       setSummary(null);
+      setMetrics(null);
     }
   };
 
@@ -117,8 +119,8 @@ export default function DealPage() {
                   onCapture={handleChartCapture}
                 />
               )}
-              <Summary summary={summary} />
-              <ExportButton summary={summary} revenue={pdfData.revenue} churn={pdfData?.churn} earnOutPercentage={pdfData?.earnOutPercentage} growth={pdfData?.growth} taxRate={pdfData?.taxRate} yearlyData={chartData} />
+              <Summary summary={summary} metrics={metrics} />
+              <ExportButton summary={summary} metrics={metrics} revenue={pdfData.revenue} churn={pdfData?.churn} earnOutPercentage={pdfData?.earnOutPercentage} growth={pdfData?.growth} taxRate={pdfData?.taxRate} yearlyData={chartData} />
             </>
           )}
         </div>
