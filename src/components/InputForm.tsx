@@ -94,21 +94,12 @@ export function InputForm({ onSubmit, onChange }: InputFormProps) {
     inputProps?: React.InputHTMLAttributes<HTMLInputElement>
   ) => (
     <div key={name} className="space-y-1">
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Label htmlFor={name} className="cursor-help">
-              {label}{" "}
-              {options?.optional && (
-                <span className="text-sm text-muted-foreground">(optional)</span>
-              )}
-            </Label>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>{tooltip}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Label htmlFor={name} title={tooltip}>
+        {label}{" "}
+        {options?.optional && (
+          <span className="text-sm text-muted-foreground">(optional)</span>
+        )}
+      </Label>
       <Input
         id={name}
         type="number"
