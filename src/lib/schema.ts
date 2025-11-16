@@ -10,6 +10,8 @@ export const DealFormSchema = z.object({
   allCashPercent: z.number().min(0).max(100, "All cash percentage cannot exceed 100%").optional().default(0),
   taxRate: z.number().min(0).max(100, "Tax rate cannot exceed 100%").optional().default(20),
   interestRate: z.number().min(0).max(50, "Interest rate cannot exceed 50%").optional().default(0),
+  currency: z.string().default("USD"),
+  inflationRate: z.number().min(0).max(20, "Inflation rate cannot exceed 20%").optional().default(0),
 }).refine((data) => {
   // Logical check: If all three percentages are provided, their sum should not exceed 100% (representing portions of the deal value)
   const sum = (data.earnOutPercent || 0) + (data.sellerFinancingPercent || 0) + (data.allCashPercent || 0);
