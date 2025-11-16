@@ -2,14 +2,14 @@
 
 
 import { useForm } from "react-hook-form";
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const Papa = require("papaparse");
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DealFormSchema, DealFormInput } from "@/lib/schema";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Separator } from "./ui/separator";
+import { financialAPI } from "@/lib/financial-api";
+import { useEffect, useState } from "react";
 
 
 
@@ -19,9 +19,14 @@ type InputFormProps = {
 };
 
 export function InputForm({ onSubmit, onImportData }: InputFormProps) {
+  const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({});
+  const [apiLoading, setApiLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<DealFormInput>({
     resolver: zodResolver(DealFormSchema),
@@ -37,6 +42,23 @@ export function InputForm({ onSubmit, onImportData }: InputFormProps) {
       interestRate: 0,
     },
   });
+
+  // Load exchange rates on mount
+  useEffect(() => {
+    const loadExchangeRates = async () => {
+      setApiLoading(true);
+      try {
+        const rates = await financialAPI.getExchangeRates();
+        setExchangeRates(rates.rates);
+      } catch (error) {
+        console.error('Failed to load exchange rates:', error);
+      } finally {
+        setApiLoading(false);
+      }
+    };
+
+    loadExchangeRates();
+  }, []);
 
   const handleImportCSV = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -130,11 +152,12 @@ export function InputForm({ onSubmit, onImportData }: InputFormProps) {
       <Separator className="my-4" />
 
       {/* Advanced Inputs */}
-      <div className="space-y-4">
-        <h2 className="text-lg font-semibold">Advanced Financing Options</h2>
-        <p className="text-sm text-muted-foreground">
-          All advanced inputs are optional and used for detailed modeling.
-        </p>
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold">Advanced Financing Options</h2>
+          <p className="text-sm text-muted-foreground">
+            All advanced inputs are optional and used for detailed modeling.
+            {apiLoading && " Loading market data..."}
+          </p>
         {renderInput("earnOutYears", "Earn Out Years", "Number of years the earn-out payments will be made.", { optional: true }, { min: 1, max: 10, step: 1 })}
         {renderInput("sellerFinancingPercent", "Seller Financing (%)", "Percentage of annual revenue financed by the seller with interest.", {
           optional: true,
