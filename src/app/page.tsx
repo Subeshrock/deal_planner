@@ -23,17 +23,25 @@ export default function DealPage() {
   const [summary, setSummary] = useState<DealSummary | null>(null);
   const [pdfData, setPdfData] = useState<PDFData>()
   const [chartImage, setChartImage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChartCapture = (img: string) => {
     setChartImage(img);
   };
 
   const handleCalculate = (data: DealFormInput) => {
-    const { annualRevenue, churnRate, growthRate, earnOutPercent, taxRate } = data;
-    setPdfData({churn: churnRate, revenue: annualRevenue, growth: growthRate, earnOutPercentage: earnOutPercent, taxRate});
-    const { chartData, summary } = calculateDealScenarios(data);
-    setChartData(chartData);
-    setSummary(summary);
+    try {
+      setError(null);
+      const { annualRevenue, churnRate, growthRate, earnOutPercent, taxRate } = data;
+      setPdfData({churn: churnRate, revenue: annualRevenue, growth: growthRate, earnOutPercentage: earnOutPercent, taxRate});
+      const { chartData, summary } = calculateDealScenarios(data);
+      setChartData(chartData);
+      setSummary(summary);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred during calculation");
+      setChartData(null);
+      setSummary(null);
+    }
   };
 
   return (
@@ -48,19 +56,25 @@ export default function DealPage() {
 
         {/* Right side: Chart, Summary, Export */}
         <div className="md:w-1/2 flex flex-col space-y-6">
-          {chartData && summary && pdfData && (
+          {error && (
+            <div className="border border-red-300 rounded-lg p-4 bg-red-50">
+              <h3 className="text-red-800 font-semibold">Calculation Error</h3>
+              <p className="text-red-700">{error}</p>
+            </div>
+          )}
+          {chartData && summary && pdfData && !error && (
             <>
               <Chart data={chartData} />
               {/* 🔁 Hidden chart used only for image capture */}
               {chartImage === null && (
-               <Chart
-                 data={chartData}
-                 hidden
-                 onCapture={handleChartCapture}
-               />
+                <Chart
+                  data={chartData}
+                  hidden
+                  onCapture={handleChartCapture}
+                />
               )}
               <Summary summary={summary} />
-               <ExportButton summary={summary} revenue={pdfData.revenue} churn={pdfData?.churn} earnOutPercentage={pdfData?.earnOutPercentage} growth={pdfData?.growth} taxRate={pdfData?.taxRate} yearlyData={chartData} />
+              <ExportButton summary={summary} revenue={pdfData.revenue} churn={pdfData?.churn} earnOutPercentage={pdfData?.earnOutPercentage} growth={pdfData?.growth} taxRate={pdfData?.taxRate} yearlyData={chartData} />
             </>
           )}
         </div>

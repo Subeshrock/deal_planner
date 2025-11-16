@@ -15,6 +15,13 @@ export function calculateDealScenarios(data: DealFormInput): { chartData: ChartD
     sellerFinancingPercent = 0,
   } = data;
 
+  // Validate inputs
+  if (annualRevenue <= 0) throw new Error("Annual revenue must be positive");
+  if (churnRate < 0 || churnRate > 100) throw new Error("Churn rate must be between 0 and 100");
+  if (earnOutPercent < 0 || earnOutPercent > 100) throw new Error("Earn out percentage must be between 0 and 100");
+  if (taxRate < 0 || taxRate > 100) throw new Error("Tax rate must be between 0 and 100");
+  if (earnOutYears < 1 || earnOutYears > 10) throw new Error("Earn out years must be between 1 and 10");
+
   const earnOutFraction = earnOutPercent / 100;
   const churnFraction = churnRate / 100;
   const growthFraction = (growthRate ?? 0) / 100;
