@@ -97,7 +97,24 @@ export function InputForm({ onSubmit, onImportData }: InputFormProps) {
 
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" aria-labelledby="form-heading">
+      {/* Import Data */}
+      <div className="space-y-4">
+        <h2 className="text-lg font-semibold">Import Historical Data</h2>
+        <p className="text-sm text-muted-foreground">
+          Upload a CSV file with historical revenue data (columns: year, revenue) to analyze trends.
+        </p>
+        <input
+          type="file"
+          accept=".csv"
+          onChange={handleImportCSV}
+          aria-label="Upload CSV file with historical revenue data"
+          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <Separator className="my-4" />
+
       {/* Basic Inputs */}
       <div className="space-y-4">
         <h2 className="text-lg font-semibold">Basic Deal Inputs</h2>
