@@ -58,6 +58,20 @@ export default function DealPage() {
     }
   };
 
+  const handleFormChange = (data: DealFormInput) => {
+    // Real-time calculation for sensitivity analysis
+    try {
+      setError(null);
+      const { annualRevenue, churnRate, growthRate, earnOutPercent, taxRate } = data;
+      setPdfData({churn: churnRate, revenue: annualRevenue, growth: growthRate, earnOutPercentage: earnOutPercent, taxRate});
+      const { chartData, summary } = calculateDealScenarios(data);
+      setChartData(chartData);
+      setSummary(summary);
+    } catch (err) {
+      // Don't set error for real-time, only on submit
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
       {showTutorial && (
@@ -82,7 +96,7 @@ export default function DealPage() {
       <div className="flex flex-col md:flex-row gap-8">
         {/* Left side: Form */}
         <div className="md:w-1/2">
-          <InputForm onSubmit={handleCalculate} />
+          <InputForm onSubmit={handleCalculate} onChange={handleFormChange} />
         </div>
 
         {/* Right side: Chart, Summary, Export */}
