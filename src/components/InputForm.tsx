@@ -11,15 +11,17 @@ import { Separator } from "./ui/separator";
 import { financialAPI } from "@/lib/financial-api";
 import { t, getCurrencySymbol, type Language } from "@/lib/localization";
 import { useEffect, useState } from "react";
+import Papa from "papaparse";
 
 
 
 type InputFormProps = {
   onSubmit: (data: DealFormInput) => void;
+  onChange?: (data: DealFormInput) => void;
   onImportData?: (data: { year: number; revenue: number }[]) => void;
 };
 
-export function InputForm({ onSubmit, onImportData, language = 'en' }: InputFormProps & { language?: Language }) {
+export function InputForm({ onSubmit, onChange, onImportData, language = 'en' }: InputFormProps & { language?: Language }) {
   const [exchangeRates, setExchangeRates] = useState<Record<string, number>>({});
   const [apiLoading, setApiLoading] = useState(false);
 
@@ -43,6 +45,14 @@ export function InputForm({ onSubmit, onImportData, language = 'en' }: InputForm
       interestRate: 0,
     },
   });
+
+  // Watch form values for real-time updates
+  const watchedValues = watch();
+  useEffect(() => {
+    if (onChange) {
+      onChange(watchedValues);
+    }
+  }, [watchedValues, onChange]);
 
   // Load exchange rates on mount
   useEffect(() => {
